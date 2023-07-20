@@ -24,12 +24,12 @@ Route::post('register', [AuthController::class, 'userRegister']);
 
 Route::post('login', [AuthController::class, 'userLogin']);
 
-Route::post('logout', [AuthController::class, 'userLogout'])->middleware(['auth:sanctum']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('logout', [AuthController::class, 'userLogout']);
+    Route::post('update-profile', [AuthController::class, 'updateProfile']);
 
-Route::post('update-profile', [AuthController::class, 'updateProfile'])->middleware(['auth:sanctum']);
+    Route::get('travel-lists', [TravelController::class, 'allTravel']);
+    Route::get('travel-lists/filter', [TravelController::class, 'filterTravel']);
 
-Route::get('travel-lists', [TravelController::class, 'allTravel'])->middleware(['auth:sanctum']);
-Route::get('travel-lists/filter', [TravelController::class, 'filterTravel'])->middleware(['auth:sanctum']);
-
-Route::post('travel/order', [TravelOrderController::class, 'createOrder'])->middleware('auth:sanctum');
-
+    Route::post('travel/order', [TravelOrderController::class, 'createOrder']);
+});
